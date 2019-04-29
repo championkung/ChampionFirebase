@@ -6,6 +6,52 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
+  TextStyle myLabelStyle = TextStyle(fontSize: 18.0, color: Colors.white);
+  TextStyle myHintStyle = TextStyle(color: Colors.white30);
+
+  Widget signInButton() {
+    return RaisedButton(
+      color: Colors.orange[600],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Text('Sign In'),
+      onPressed: () {
+
+      },
+    );
+  }
+
+  Widget signUpButton() {
+    return RaisedButton(
+      color: Colors.orange[300],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Text('Sign Up'),
+      onPressed: () {},
+    );
+  }
+
+  Widget emailTextFormField() {
+    return TextFormField(
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+          labelText: 'Email: ',
+          hintText: 'youremail.com',
+          hintStyle: myHintStyle,
+          labelStyle: myLabelStyle),
+    );
+  }
+
+  Widget passwordTextFormField() {
+    return TextFormField(
+      obscureText: true,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+          labelText: 'Password: ',
+          hintText: 'your password',
+          hintStyle: myHintStyle,
+          labelStyle: myLabelStyle),
+    );
+  }
+
   Widget showAppName() {
     return Text(
       'Champion Flutter นะจ้ะ',
@@ -25,9 +71,12 @@ class _AuthenState extends State<Authen> {
   Widget build(BuildContext context) {
     // return Text('StatfulWidget');
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Colors.teal[900], Colors.teal[400]], begin: Alignment(-1.0, -1.0))),
+              gradient: LinearGradient(
+                  colors: [Colors.teal[400], Colors.teal[600]],
+                  begin: Alignment(-1.0, -1.0))),
           padding: EdgeInsets.only(top: 100.0),
           alignment: Alignment(0, -1),
           child: Column(
@@ -40,7 +89,33 @@ class _AuthenState extends State<Authen> {
               Container(
                 margin: EdgeInsets.only(top: 15.0),
                 child: showAppName(),
-              )
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 50, right: 50),
+                child: emailTextFormField(),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 50, right: 50),
+                child: passwordTextFormField(),
+              ),
+              Container(
+                  margin: EdgeInsets.only(left: 50, right: 50, top: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(right: 5),
+                          child: signInButton(),
+                        )
+                      ),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(left: 5),
+                          child: signUpButton(),
+                        )
+                      ),
+                    ],
+                  ))
             ],
           )),
     );
