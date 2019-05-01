@@ -10,6 +10,11 @@ class _AuthenState extends State<Authen> {
   TextStyle myLabelStyle = TextStyle(fontSize: 18.0, color: Colors.white);
   TextStyle myHintStyle = TextStyle(color: Colors.white30);
 
+
+// For Form
+final formKey = GlobalKey<FormState>();
+
+
   Widget signInButton() {
     return RaisedButton(
       color: Colors.orange[600],
@@ -21,7 +26,9 @@ class _AuthenState extends State<Authen> {
     );
   }
 
-  Widget signUpButton() {
+  
+
+FormFieldState formFieldState() => FormFieldState();Widget signUpButton() {
     return RaisedButton(
       color: Colors.orange[300],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),

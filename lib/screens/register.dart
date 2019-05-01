@@ -12,7 +12,10 @@ class _RegisterState extends State<Register> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String nameString, emailString, passwordString;
 
-  Widget uploadButton() {
+  // For Snackbar
+  final snackBarKey = GlobalKey<ScaffoldState>();
+
+  Widget uploadButton(BuildContext context) {
     return IconButton(
       icon: Icon(
         Icons.cloud_upload,
@@ -24,21 +27,34 @@ class _RegisterState extends State<Register> {
           formKey.currentState.save();
           print(
               'Name = $nameString, Email = $emailString, Password = $passwordString');
-          uploadValueToFirebase();
+          uploadValueToFirebase(context);
         }
       },
     );
   }
 
-  void uploadValueToFirebase() async {
+  void uploadValueToFirebase(BuildContext context) async {
     FirebaseUser firebaseUser = await _auth
         .createUserWithEmailAndPassword(
             email: emailString, password: passwordString)
         .then((user) {
       print('Register Successful With >>> $user');
+      Navigator.pop(context);
     }).catchError((error) {
-      print(error);
+      // String errorString = error.message;
+      print(error.message);
+      showSnackBar(error.message);
     });
+  }
+
+  void showSnackBar(String messageString) {
+    SnackBar snackbar = SnackBar(
+      backgroundColor: Colors.red,
+      duration: Duration(seconds: 10),
+      content: Text(messageString),
+      action: SnackBarAction(label: 'Close',onPressed: (){},),
+    );
+    snackBarKey.currentState.showSnackBar(snackbar);
   }
 
   Widget passwordTextFormField() {
@@ -52,10 +68,7 @@ class _RegisterState extends State<Register> {
                 color: Colors.grey,
               ),
               borderRadius: BorderRadius.circular(10.0)),
-          icon: Icon(
-            Icons.vpn_key,
-            color: Colors.blue[700]
-          )),
+          icon: Icon(Icons.vpn_key, color: Colors.blue[700])),
       validator: (String value) {
         if (value.length < 6) {
           return 'Password must more than 6 charactor';
@@ -119,10 +132,11 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: snackBarKey,
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Register'),
-          actions: <Widget>[uploadButton()],
+          actions: <Widget>[uploadButton(context)],
           backgroundColor: Colors.blue[700],
         ),
         body: Form(
