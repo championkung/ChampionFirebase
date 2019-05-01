@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:championfirebase/screens/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:championfirebase/screens/my_service.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -10,15 +12,54 @@ class _AuthenState extends State<Authen> {
   TextStyle myLabelStyle = TextStyle(fontSize: 18.0, color: Colors.white);
   TextStyle myHintStyle = TextStyle(color: Colors.white30);
 
-// For Form
+  // For Form
   final formKey = GlobalKey<FormState>();
 
-//  Constant
+  //For SnackBar
+  final snackBarKey = GlobalKey<ScaffoldState>();
+
+  //  Constant
   String titleHaveSpace = 'กรุณากรอก ข้อมูลให้ครบ';
   String titleEmailFalse = 'กรุณากรอก รูปแบบ email ให้ถูกต้อง';
   String titlePasswordFalse = 'กรุณากรอก password มากกว่า 6 ตัวอักษร';
 
-  Widget signInButton() {
+  String emailString, passwordString;
+
+//For Firebase
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+  void checkAuthen(BuildContext context) async {
+    FirebaseUser firebaseUser = await firebaseAuth
+        .signInWithEmailAndPassword(
+            email: emailString, password: passwordString)
+        .then((objValue) {
+      showSnackBar(objValue.email);
+      //ROUTE Without Arrow Back
+      var myServiceRoute =
+          MaterialPageRoute(builder: (BuildContext context) => MyService());
+          Navigator.of(context).pushAndRemoveUntil(myServiceRoute, (Route<dynamic> route) => false);
+
+    }).catchError((objValue) {
+      String error = objValue.message;
+      print('ERROR ==> $error');
+      showSnackBar(error);
+    });
+  }
+
+  void showSnackBar(String messageString) {
+    SnackBar snackbar = SnackBar(
+      backgroundColor: Colors.red,
+      duration: Duration(seconds: 10),
+      content: Text(messageString),
+      action: SnackBarAction(
+          label: 'Close',
+          onPressed: () {} //click แล้ว จะปิด SnackBar ไปเอง ไม่ต้องใส่ค่าอะไร,
+          ),
+    );
+    snackBarKey.currentState.showSnackBar(snackbar);
+  }
+
+  Widget signInButton(BuildContext context) {
     return RaisedButton.icon(
       color: Colors.orange[600],
       label: Text('Sign In'),
@@ -26,7 +67,12 @@ class _AuthenState extends State<Authen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       onPressed: () {
         print('You Click SignIn Button');
-        if (formKey.currentState.validate()) {}
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
+          print('email ==>> $emailString');
+          print('password ==>> $passwordString');
+          checkAuthen(context);
+        }
       },
     );
   }
@@ -57,9 +103,12 @@ class _AuthenState extends State<Authen> {
       validator: (String value) {
         if (value.length == 0) {
           return titleHaveSpace;
-        } else if (!((value.contains('@')) & (value.contains(',')))) {
+        } else if (!((value.contains('@')) & (value.contains('.')))) {
           return titleEmailFalse;
         }
+      },
+      onSaved: (String value) {
+        emailString = value;
       },
     );
   }
@@ -77,6 +126,9 @@ class _AuthenState extends State<Authen> {
         if (value.length < 6) {
           return titlePasswordFalse;
         }
+      },
+      onSaved: (String value) {
+        passwordString = value;
       },
     );
   }
@@ -100,6 +152,7 @@ class _AuthenState extends State<Authen> {
   Widget build(BuildContext context) {
     // return Text('StatfulWidget');
     return Scaffold(
+        key: snackBarKey,
         resizeToAvoidBottomPadding: false,
         body: Form(
           key: formKey,
@@ -136,7 +189,7 @@ class _AuthenState extends State<Authen> {
                           Expanded(
                               child: Container(
                             margin: EdgeInsets.only(right: 5),
-                            child: signInButton(),
+                            child: signInButton(context),
                           )),
                           Expanded(
                               child: Container(

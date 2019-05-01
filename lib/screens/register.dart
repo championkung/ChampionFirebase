@@ -52,7 +52,10 @@ class _RegisterState extends State<Register> {
       backgroundColor: Colors.red,
       duration: Duration(seconds: 10),
       content: Text(messageString),
-      action: SnackBarAction(label: 'Close',onPressed: (){},),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {},
+      ),
     );
     snackBarKey.currentState.showSnackBar(snackbar);
   }
