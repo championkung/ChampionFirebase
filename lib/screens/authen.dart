@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:championfirebase/screens/register.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -25,7 +26,12 @@ class _AuthenState extends State<Authen> {
       color: Colors.orange[300],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Text('Sign Up'),
-      onPressed: () {},
+      onPressed: () {
+               print('Clicking Sign Up');
+        var registerRoute =
+            MaterialPageRoute(builder: (BuildContext context) => Register());
+            Navigator.of(context).push(registerRoute);
+      },
     );
   }
 

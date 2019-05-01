@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "504199903834",
+    "firebase_url": "https://championfirebase.firebaseio.com",
+    "project_id": "championfirebase",
+    "storage_bucket": "championfirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504199903834:android:abeb084c9d24aefa",
+        "android_client_info": {
+          "package_name": "th.co.coresolutions.championfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504199903834-ukr0blpjgloiu18kepo286bahf6aiids.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXSb5MjXY_X7fx0j2dFz3Zv3xVoroQDQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "504199903834-ukr0blpjgloiu18kepo286bahf6aiids.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
