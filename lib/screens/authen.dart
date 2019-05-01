@@ -10,34 +10,38 @@ class _AuthenState extends State<Authen> {
   TextStyle myLabelStyle = TextStyle(fontSize: 18.0, color: Colors.white);
   TextStyle myHintStyle = TextStyle(color: Colors.white30);
 
-
 // For Form
-final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
+//  Constant
+  String titleHaveSpace = 'กรุณากรอก ข้อมูลให้ครบ';
+  String titleEmailFalse = 'กรุณากรอก รูปแบบ email ให้ถูกต้อง';
+  String titlePasswordFalse = 'กรุณากรอก password มากกว่า 6 ตัวอักษร';
 
   Widget signInButton() {
-    return RaisedButton(
+    return RaisedButton.icon(
       color: Colors.orange[600],
+      label: Text('Sign In'),
+      icon: Icon(Icons.account_circle),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      child: Text('Sign In'),
       onPressed: () {
-
+        print('You Click SignIn Button');
+        if (formKey.currentState.validate()) {}
       },
     );
   }
 
-  
-
-FormFieldState formFieldState() => FormFieldState();Widget signUpButton() {
+  FormFieldState formFieldState() => FormFieldState();
+  Widget signUpButton() {
     return RaisedButton(
       color: Colors.orange[300],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Text('Sign Up'),
       onPressed: () {
-               print('Clicking Sign Up');
+        print('Clicking Sign Up');
         var registerRoute =
             MaterialPageRoute(builder: (BuildContext context) => Register());
-            Navigator.of(context).push(registerRoute);
+        Navigator.of(context).push(registerRoute);
       },
     );
   }
@@ -50,6 +54,13 @@ FormFieldState formFieldState() => FormFieldState();Widget signUpButton() {
           hintText: 'youremail.com',
           hintStyle: myHintStyle,
           labelStyle: myLabelStyle),
+      validator: (String value) {
+        if (value.length == 0) {
+          return titleHaveSpace;
+        } else if (!((value.contains('@')) & (value.contains(',')))) {
+          return titleEmailFalse;
+        }
+      },
     );
   }
 
@@ -62,6 +73,11 @@ FormFieldState formFieldState() => FormFieldState();Widget signUpButton() {
           hintText: 'your password',
           hintStyle: myHintStyle,
           labelStyle: myLabelStyle),
+      validator: (String value) {
+        if (value.length < 6) {
+          return titlePasswordFalse;
+        }
+      },
     );
   }
 
@@ -84,53 +100,53 @@ FormFieldState formFieldState() => FormFieldState();Widget signUpButton() {
   Widget build(BuildContext context) {
     // return Text('StatfulWidget');
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Colors.blue[400], Colors.blue[700]],
-                  begin: Alignment(-1.0, -1.0))),
-          padding: EdgeInsets.only(top: 100.0),
-          alignment: Alignment(0, -1),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: 128.0,
-                height: 128.0,
-                child: showLogo(),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 15.0),
-                child: showAppName(),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 50, right: 50),
-                child: emailTextFormField(),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 50, right: 50),
-                child: passwordTextFormField(),
-              ),
-              Container(
-                  margin: EdgeInsets.only(left: 50, right: 50, top: 15.0),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(right: 5),
-                          child: signInButton(),
-                        )
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 5),
-                          child: signUpButton(),
-                        )
-                      ),
-                    ],
-                  ))
-            ],
-          )),
-    );
+        resizeToAvoidBottomPadding: false,
+        body: Form(
+          key: formKey,
+          child: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Colors.blue[400], Colors.blue[700]],
+                      begin: Alignment(-1.0, -1.0))),
+              padding: EdgeInsets.only(top: 100.0),
+              alignment: Alignment(0, -1),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: 128.0,
+                    height: 128.0,
+                    child: showLogo(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15.0),
+                    child: showAppName(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 50, right: 50),
+                    child: emailTextFormField(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 50, right: 50),
+                    child: passwordTextFormField(),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 50, right: 50, top: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: Container(
+                            margin: EdgeInsets.only(right: 5),
+                            child: signInButton(),
+                          )),
+                          Expanded(
+                              child: Container(
+                            margin: EdgeInsets.only(left: 5),
+                            child: signUpButton(),
+                          )),
+                        ],
+                      ))
+                ],
+              )),
+        ));
   }
 }
