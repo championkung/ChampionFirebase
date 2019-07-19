@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:championfirebase/screens/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:championfirebase/screens/my_service.dart';
+import 'package:championfirebase/screens/get_api.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -28,6 +29,29 @@ class _AuthenState extends State<Authen> {
 //For Firebase
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
+  //Initial Method
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('initState WORK');
+    checkStatus(context);
+  }
+
+  Future checkStatus(BuildContext context) async {
+    FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      goToService(context);
+    }
+  }
+
+  void goToService(BuildContext context) {
+    var serviceRoute =
+        MaterialPageRoute(builder: (BuildContext context) => MyService());
+    Navigator.of(context)
+        .pushAndRemoveUntil(serviceRoute, (Route<dynamic> route) => false);
+  }
+
   void checkAuthen(BuildContext context) async {
     FirebaseUser firebaseUser = await firebaseAuth
         .signInWithEmailAndPassword(
@@ -37,8 +61,8 @@ class _AuthenState extends State<Authen> {
       //ROUTE Without Arrow Back
       var myServiceRoute =
           MaterialPageRoute(builder: (BuildContext context) => MyService());
-          Navigator.of(context).pushAndRemoveUntil(myServiceRoute, (Route<dynamic> route) => false);
-
+      Navigator.of(context)
+          .pushAndRemoveUntil(myServiceRoute, (Route<dynamic> route) => false);
     }).catchError((objValue) {
       String error = objValue.message;
       print('ERROR ==> $error');
@@ -86,7 +110,8 @@ class _AuthenState extends State<Authen> {
       onPressed: () {
         print('Clicking Sign Up');
         var registerRoute =
-            MaterialPageRoute(builder: (BuildContext context) => Register());
+            // MaterialPageRoute(builder: (BuildContext context) => Register());
+        MaterialPageRoute(builder: (BuildContext context) => getAPI());
         Navigator.of(context).push(registerRoute);
       },
     );
@@ -134,13 +159,31 @@ class _AuthenState extends State<Authen> {
   }
 
   Widget showAppName() {
-    return Text(
-      'Champion Flutter นะจ้ะ',
-      style: TextStyle(
-          fontFamily: 'Kanit',
-          fontSize: 24.0,
-          fontWeight: FontWeight.normal,
-          color: Colors.white),
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Text(
+              'ศูนย์ข้อมูลอำเภอ',
+              style: TextStyle(
+                  fontFamily: 'Kanit',
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white),
+            ),
+          ),
+          Container(
+            child: Text(
+              'เพื่อการบริหารการปกครอง',
+              style: TextStyle(
+                  fontFamily: 'Kanit',
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -159,46 +202,48 @@ class _AuthenState extends State<Authen> {
           child: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [Colors.blue[400], Colors.blue[700]],
+                      colors: [Colors.blue[700], Colors.blue[800]],
                       begin: Alignment(-1.0, -1.0))),
-              padding: EdgeInsets.only(top: 100.0),
+              padding: EdgeInsets.only(top: 90.0),
               alignment: Alignment(0, -1),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: 128.0,
-                    height: 128.0,
-                    child: showLogo(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15.0),
-                    child: showAppName(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 50, right: 50),
-                    child: emailTextFormField(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 50, right: 50),
-                    child: passwordTextFormField(),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(left: 50, right: 50, top: 15.0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Container(
-                            margin: EdgeInsets.only(right: 5),
-                            child: signInButton(context),
-                          )),
-                          Expanded(
-                              child: Container(
-                            margin: EdgeInsets.only(left: 5),
-                            child: signUpButton(),
-                          )),
-                        ],
-                      ))
-                ],
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: 128.0,
+                      height: 128.0,
+                      child: showLogo(),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 15.0),
+                      child: showAppName(),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 15.0, left: 50, right: 50),
+                      child: emailTextFormField(),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 50, right: 50),
+                      child: passwordTextFormField(),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(left: 50, right: 50, top: 15.0),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                                child: Container(
+                              margin: EdgeInsets.only(right: 5),
+                              child: signInButton(context),
+                            )),
+                            Expanded(
+                                child: Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: signUpButton(),
+                            )),
+                          ],
+                        ))
+                  ],
+                ),
               )),
         ));
   }
